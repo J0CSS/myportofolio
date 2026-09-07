@@ -205,6 +205,58 @@ h1, h2, h3, .brand {
     color: var(--ink);
 }
 
+.skills-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.skill-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.skill-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--accent);
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.skill-icon {
+    font-size: 1.5rem;
+}
+
+.skill-category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.skill-name {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+}
+
+.skill-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
 .site-footer {
     padding: 1.5rem;
     color: var(--text-muted);
