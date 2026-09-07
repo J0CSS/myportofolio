@@ -339,21 +339,38 @@ h1, h2, h3, .brand {
     border-radius: var(--radius);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .hero {
+        padding: 3rem 0 3.5rem; 
+    }
+
     .hero-grid {
         grid-template-columns: 1fr;
         grid-template-areas:
             "identity"
             "photo"
             "details";
+
+        gap: 2rem;
     }
 
     .hero-photo {
-        max-width: 220px;
+        max-width: 240px;
     }
 
-    .social-links {
-        justify-content: flex-start;
+    .skills-grid {
+        grid-template-columns: 1fr;
     }
 }
 
+@media (max-width: 480px) {
+    .site-header .container {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .site-header nav {
+        gap: 1rem;
+    }
+}
