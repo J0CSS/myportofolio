@@ -34,6 +34,7 @@ h1, h2, h3, .brand {
     padding: 0 1.5rem;
 }
 
+/* Header and Navigation */
 .site-header {
     border-bottom: 1px solid var(--line);
     position: sticky;
@@ -73,6 +74,7 @@ h1, h2, h3, .brand {
     color: var(--accent);
 }
 
+/* Hero / Profile Section */
 .hero {
     padding: 4.5rem 0 5rem;
 }
@@ -323,6 +325,7 @@ h1, h2, h3, .brand {
     border-radius: var(--radius);
 }
 
+/* Footer */
 .site-footer {
     padding: 1.5rem;
     color: var(--text-muted);
