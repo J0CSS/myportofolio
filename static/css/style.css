@@ -185,6 +185,26 @@ h1, h2, h3, .brand {
     border: 3px solid var(--ink);
 }
 
+.section-block {
+    padding: 4rem 0;
+    border-top: 1px solid var(--line);
+}
+
+.section-kicker {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--ink);
+}
+
 .site-footer {
     padding: 1.5rem;
     color: var(--text-muted);
@@ -209,3 +229,4 @@ h1, h2, h3, .brand {
         justify-content: flex-start;
     }
 }
+
