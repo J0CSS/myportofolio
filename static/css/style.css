@@ -12,6 +12,9 @@
     --line: #e3d9c9;
     --text-muted: #6b6459;
     --radius: 4px;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 12px rgba(28,25,23,0.05);
+    --shadow-hover: 0 8px 24px rgba(28,25,33,0.1);
 }
 
 body {
@@ -21,7 +24,7 @@ body {
     line-height: 1.6;
 }
 
-h1, .brand {
+h1, h2, h3, .brand {
     font-family: "Space Grotesk", -apple-system, sans-serif;
 }
 
@@ -33,6 +36,10 @@ h1, .brand {
 
 .site-header {
     border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background-color: var(--paper);
+    z-index: 100;
 }
 
 .site-header .container {
@@ -58,6 +65,12 @@ h1, .brand {
     color: var(--ink);
     text-decoration: none;
     font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.site-header nav a:hover {
+    color: var(--accent);
 }
 
 .hero {
@@ -134,11 +147,13 @@ h1, .brand {
     background-color: var(--ink);
     border-radius: var(--radius);
     padding: 0.5rem 1.1rem;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+
 }
 
 .social-link:hover {
     background-color: var(--accent);
+    transform: translateY(-2px);
 }
 
 .hero-photo {
