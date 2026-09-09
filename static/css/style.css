@@ -74,6 +74,17 @@ h1, h2, h3, .brand {
     color: var(--accent);
 }
 
+.brand-logo {
+  font-weight: 700;
+  color: #1a1a1a; /* Match your main text color */
+  text-decoration: none; /* Removes the purple underline */
+  font-size: 1.1rem;
+}
+
+.brand-logo:hover {
+    opacity: 0.8;
+}
+
 /* Hero / Profile Section */
 .hero {
     padding: 4.5rem 0 5rem;

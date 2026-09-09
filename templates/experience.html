@@ -13,14 +13,14 @@
 <body>
     <header class="site-header" role="banner">
         <div class="container">
-            <a href="{% url 'main:show_main' %}" aria-label="{{ name }} Home Page">{{ name }}</a>
+            <a href="{% url 'main:show_main' %}" class="brand-logo" aria-label="{{ name }} Home Page">{{ name }}</a>
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
             </nav>
-        </div>
+        </div> 
     </header>
 
     <main>

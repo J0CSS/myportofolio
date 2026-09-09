@@ -12,15 +12,15 @@
 </head>
 <body>
     <header class="site-header" role="banner">
-        <div class="container">
-            <a href="{% url 'main:show_main' %}" aria-label="{{ name }} Home Page">{{ name }}</a>
+         <div class="container">
+            <a href="{% url 'main:show_main' %}" class="brand-logo" aria-label="{{ name }} Home Page">{{ name }}</a>
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
             </nav>
-        </div>
+        </div> 
     </header>
 
     <main id="main-content">
@@ -52,83 +52,6 @@
                         <a href="https://www.linkedin.com/in/joshua-sidik-614672369/" class="social-link">LinkedIn</a>
                         <a href="mailto:joshua.carnsyn@ui.ac.id" class="social-link">Email</a>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section class="section-block" id="skills" aria-labelledby="skills-heading">
-            <div class="container">
-                <p class="section-kicker">Capabilities & Proficiency</p>
-                <h2 id="skills-heading" class="section-title">Skills & Certifications</h2>
-
-                <ul class="skills-grid" role="list">
-                    <li class="skill-card">
-                        <div class="skill-header">
-                            <span class="skill-icon" aria-hidden="true">🐍</span>
-                            <span class="skill-category">Programming</span>
-                        </div>
-                        <h3 class="skill-name">Python</h3>
-                        <p class="skill-desc">Proficient in scripting, data structures, and computer vision / NLP modeling workflows.</p>
-                    </li>
-
-                    <li class="skill-card">
-                        <div class="skill-header">
-                            <span class="skill-icon" aria-hidden="true">☕</span>
-                            <span class="skill-category">Programming</span>
-                        </div>
-                        <h3 class="skill-name">Java</h3>
-                        <p class="skill-desc">Solid understanding of OOP, standard libraries, and software engineering principles.</p>
-                    </li>
-
-                    <li class="skill-card">
-                        <div class="skill-header">
-                            <span class="skill-icon" aria-hidden="true">🌐</span>
-                            <span class="skill-category">Language Certification</span>
-                        </div>
-                        <h3 class="skill-name">IELTS 7.5</h3>
-                        <p class="skill-desc">High professional English proficiency across Listening, Reading, Writing, and Speaking.</p>
-                    </li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section class="section-block" id="projects" aria-labelledby="projects-heading">
-            <div class="container">
-                <p class="section-kicker">Featured Works</p>
-                <h2 id="projects-heading" class="section-title">Projects</h2>
-
-                <div class="projects-list">
-                    <article class="project-card">
-                        <div class="project-content">
-                            <span class="project-tag">Computer Vision</span>
-                            <h3 class="project-title">Supermarket Computer Vision Detector</h3>
-                            <p class="project-description">
-                                A vision system designed to detect and count purchased items placed on a table automatically. Streamlines self-checkout scenarios by recognizing multiple distinct objects concurrently.
-                            </p>
-                            <ul class="tech-tags" aria-label="Technologies used">
-                                <li>Python</li>
-                                <li>OpenCV</li>
-                                <li>Object Detection & Instance Segmentation</li>
-                            </ul>
-                        </div>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-content">
-                            <span class="project-tag">Natural Language Processing</span>
-                            <h3 class="project-title">Title-Content Alignment Analyzer</h3>
-                            <p class="project-description">
-                                An NLP model built to analyze news articles and determine whether the headline aligns with the body content.
-                            </p>
-                            <ul class="tech-tags" aria-label="Technologies used">
-                                <li>Python</li>
-                                <li>NLP</li>
-                                <li>Text Similarity</li>
-                            </ul>
-                        </div>
-                    </article>
                 </div>
             </div>
         </section>
