@@ -153,3 +153,8 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://joshua-carnsyn-myportofolio.pws.cs.ui.ac.id',
+    'http://joshua-carnsyn-myportofolio.pws.cs.ui.ac.id',
+]
