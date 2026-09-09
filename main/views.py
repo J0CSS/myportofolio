@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from main.models import Experience
+from main.models import Experience, Project, Skill
 
 
 def show_main(request):
@@ -12,9 +12,11 @@ def show_main(request):
             "CS student at Universitas Indonesia."
             "A machine learning enthusiast and calculus enjoyer"
         ),
+        "skills": Skill.objects.all(),
+        "featured_projects": Project.objects.prefetch_related("tech_tags").order_by("-started_at")[:3],
+        "recent_experience": Experience.objects.all().order_by("-start_date")[:2],
     }
     return render(request, "index.html", context)
-
 
 def show_experience(request):
     context = {
