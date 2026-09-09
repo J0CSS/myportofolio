@@ -14,8 +14,9 @@
     <header class="site-header" role="banner">
         <div class="container">
             <a href="{% url 'main:show_main' %}" aria-label="{{ name }} Home Page">{{ name }}</a>
-            <nav aria-label="Main Navigation">
-                <a href="#profile">Profile</a>
+            <nav>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
             </nav>
