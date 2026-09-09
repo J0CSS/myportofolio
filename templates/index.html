@@ -63,32 +63,18 @@
                 <h2 id="skills-heading" class="section-title">Skills & Certifications</h2>
 
                 <ul class="skills-grid" role="list">
-                    <li class="skill-card">
-                        <div class="skill-header">
-                            <span class="skill-icon" aria-hidden="true">🐍</span>
-                            <span class="skill-category">Programming</span>
-                        </div>
-                        <h3 class="skill-name">Python</h3>
-                        <p class="skill-desc">Proficient in scripting, data structures, and computer vision / NLP modeling workflows.</p>
-                    </li>
-
-                    <li class="skill-card">
-                        <div class="skill-header">
-                            <span class="skill-icon" aria-hidden="true">☕</span>
-                            <span class="skill-category">Programming</span>
-                        </div>
-                        <h3 class="skill-name">Java</h3>
-                        <p class="skill-desc">Solid understanding of OOP, standard libraries, and software engineering principles.</p>
-                    </li>
-
-                    <li class="skill-card">
-                        <div class="skill-header">
-                            <span class="skill-icon" aria-hidden="true">🌐</span>
-                            <span class="skill-category">Language Certification</span>
-                        </div>
-                        <h3 class="skill-name">IELTS 7.5</h3>
-                        <p class="skill-desc">High professional English proficiency across Listening, Reading, Writing, and Speaking.</p>
-                    </li>
+                    {% for skill in skills %}
+                        <li class="skill-card">
+                            <div class="skill-header">
+                                <span class="skill-icon" aria-hidden="true">{{ skill.icon|default:"⚡" }}</span>
+                                <span class="skill-category">{{ skill.category }}</span>
+                            </div>
+                            <h3 class="skill-name">{{ skill.name }}</h3>
+                            <p class="skill-desc">{{ skill.description }}</p>
+                        </li>
+                    {% empty %}
+                        <p>No skills or certifications added yet.</p>
+                    {% endfor %}
                 </ul>
             </div>
         </section>
@@ -100,35 +86,26 @@
                 <h2 id="projects-heading" class="section-title">Projects</h2>
 
                 <div class="projects-list">
-                    <article class="project-card">
-                        <div class="project-content">
-                            <span class="project-tag">Computer Vision</span>
-                            <h3 class="project-title">Supermarket Computer Vision Detector</h3>
-                            <p class="project-description">
-                                A vision system designed to detect and count purchased items placed on a table automatically. Streamlines self-checkout scenarios by recognizing multiple distinct objects concurrently.
-                            </p>
-                            <ul class="tech-tags" aria-label="Technologies used">
-                                <li>Python</li>
-                                <li>OpenCV</li>
-                                <li>Object Detection & Instance Segmentation</li>
-                            </ul>
-                        </div>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-content">
-                            <span class="project-tag">Natural Language Processing</span>
-                            <h3 class="project-title">Title-Content Alignment Analyzer</h3>
-                            <p class="project-description">
-                                An NLP model built to analyze news articles and determine whether the headline aligns with the body content.
-                            </p>
-                            <ul class="tech-tags" aria-label="Technologies used">
-                                <li>Python</li>
-                                <li>NLP</li>
-                                <li>Text Similarity</li>
-                            </ul>
-                        </div>
-                    </article>
+                    {% for project in projects %}
+                        <article class="project-card">
+                            <div class="project-content">
+                                <span class="project-tag">{{ project.get_project_tags_display|default:project.project_tags }}</span>
+                                <h3 class="project-title">{{ project.title }}</h3>
+                                <p class="project-description">
+                                    {{ project.description }}
+                                </p>
+                                <ul class="tech-tags" aria-label="Technologies used">
+                                    {% for tech in project.tech_tags.all %}
+                                        <li>{{ tech.name }}</li>
+                                    {% empty %}
+                                        <li>No technologies listed</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </article>
+                    {% empty %}
+                        <p>No projects added yet.</p>
+                    {% endfor %}
                 </div>
             </div>
         </section>
