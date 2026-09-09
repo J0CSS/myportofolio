@@ -11,7 +11,6 @@ def create_superuser(apps, schema_editor):
         User.objects.create_superuser(username=username, email=email, password=password)
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0001_initial'),
     ]
