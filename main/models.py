@@ -53,6 +53,9 @@ class Experience(models.Model):
     started_at = models.DateField(default=timezone.now)
     ended_at = models.DateField(blank=True, null=True)
 
+    class Meta:
+        ordering = ['-started_at']
+
     def __str__(self):
         return self.title
     
@@ -85,12 +88,20 @@ class Project(models.Model):
         help_text="Brief snippet for homepage card. If left blank, description will be truncated."
     )
 
+    class Meta:
+        ordering = ['-started_at']
+
     def __str__(self):
         return self.title
     
     @property
     def is_ongoing(self):
         return self.ended_at is None
+
+    @property
+    def primary_tag(self):
+        first_tag = self.project_tags.first()
+        return first_tag.name if first_tag else "General"
 
     @property
     def display_summary(self):
@@ -119,9 +130,22 @@ class Skill(models.Model):
     
     thumbnail = models.URLField(blank=True, null=True)
     started_at = models.DateField(default=timezone.now, blank=True, null=True)
+    icon = models.CharField(max_length=50, blank=True, default="⚡", help_text="Emoji or icon identifier")
+
+    class Meta:
+        ordering = ['title']
 
     def __str__(self):
         return self.title
+
+    @property
+    def name(self):
+        return self.title
+
+    @property
+    def category_display(self):
+        tags = self.category.all()
+        return ", ".join([tag.name for tag in tags]) if tags else "General"
 
     @property
     def years_of_experience(self):
