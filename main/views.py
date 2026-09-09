@@ -13,8 +13,8 @@ def show_main(request):
             "A machine learning enthusiast and calculus enjoyer"
         ),
         "skills": Skill.objects.all(),
-        "featured_projects": Project.objects.prefetch_related("tech_tags").order_by("-started_at")[:3],
-        "recent_experience": Experience.objects.all().order_by("-start_date")[:2],
+        "projects": Project.objects.prefetch_related("tech_tags").order_by("-started_at")[:3],
+        "recent_experience": Experience.objects.all().order_by("-started_at")[:2],
     }
     return render(request, "index.html", context)
 
