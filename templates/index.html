@@ -55,6 +55,60 @@
                 </div>
             </div>
         </section>
+
+        <!-- Skills Section -->
+        <section class="section-block" id="skills" aria-labelledby="skills-heading">
+            <div class="container">
+                <p class="section-kicker">Capabilities & Proficiency</p>
+                <h2 id="skills-heading" class="section-title">Skills & Certifications</h2>
+
+                <ul class="skills-grid" role="list">
+                    {% for skill in skills %}
+                        <li class="skill-card">
+                            <div class="skill-header">
+                                <span class="skill-icon" aria-hidden="true">{{ skill.icon|default:"⚡" }}</span>
+                                <span class="skill-category">{{ skill.category_display }}</span>
+                            </div>
+                            <h3 class="skill-name">{{ skill.name }}</h3>
+                            <p class="skill-desc">{{ skill.description }}</p>
+                        </li>
+                    {% empty %}
+                        <p>No skills or certifications added yet.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="section-block" id="projects" aria-labelledby="projects-heading">
+            <div class="container">
+                <p class="section-kicker">Featured Works</p>
+                <h2 id="projects-heading" class="section-title">Projects</h2>
+
+                <div class="projects-list">
+                    {% for project in projects %}
+                        <article class="project-card">
+                            <div class="project-content">
+                                <span class="project-tag">{{ project.get_project_tags_display|default:project.project_tags }}</span>
+                                <h3 class="project-title">{{ project.title }}</h3>
+                                <p class="project-description">
+                                    {{ project.description }}
+                                </p>
+                                <ul class="tech-tags" aria-label="Technologies used">
+                                    {% for tech in project.tech_tags.all %}
+                                        <li>{{ tech.name }}</li>
+                                    {% empty %}
+                                        <li>No technologies listed</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </article>
+                    {% empty %}
+                        <p>No projects added yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="site-footer" role="contentinfo">
