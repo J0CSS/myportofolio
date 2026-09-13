@@ -74,6 +74,24 @@ h1, h2, h3, .brand {
     color: var(--accent);
 }
 
+.brand-logo {
+  font-weight: 700;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.brand-logo:hover {
+    opacity: 0.8;
+}
+
+.brand-logo:focus-visible {
+  opacity: 0.8;
+  outline: 2px solid #1a1a1a;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 /* Hero / Profile Section */
 .hero {
     padding: 4.5rem 0 5rem;
