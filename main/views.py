@@ -24,3 +24,9 @@ def show_experience(request):
         "experience_list": Experience.objects.all(),
     }
     return render(request, "experience.html", context)
+
+def show_projects(request):
+    context = {
+        "projects": Project.objects.prefetch_related("tech_tags").all(),
+    }
+    return render(request, "projects.html", context)
