@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from main.models import Experience
+from main.models import Experience, Project, TechTag
 
 
 class MainTest(TestCase):
@@ -56,3 +56,33 @@ class MainTest(TestCase):
         self.assertFalse(self.experience.is_ongoing)
         self.assertContains(response, "Selesai")
         self.assertNotContains(response, "Sedang berlangsung")
+
+class ProjectPageTest(TestCase):
+
+    def test_project_page_url_and_template(self):
+        response = self.client.get(reverse("main:show_projects"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "projects.html")
+
+    def test_project_data_appears_on_page(self):
+        tech = TechTag.objects.create(name="Python")
+        project = Project.objects.create(
+            title="NLP Text Similarity",
+            description="A machine learning project for text similarity comparison.",
+        )
+        project.tech_tags.add(tech)
+
+        response = self.client.get(reverse("main:show_projects"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, project.title)
+        self.assertContains(response, project.description)
+        self.assertContains(response, "Python")
+        self.assertContains(response, "Current")
+
+    def test_empty_project_message_appears(self):
+        response = self.client.get(reverse("main:show_projects"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No projects available yet.")
