@@ -19,3 +19,26 @@ Dikarenakan ini merupakan tugas pertama, saya masih banyak menggunakan AI (gemin
 
 Git & Github:
 Untuk git dan github, untuk branching, add, commit, merge, push main, dan push pws, saya kerjakan sendiri. Yang saya tanyakan kepada AI mengenai hal ini adalah best practice dalam git workflow seperti penamaan branch, commit message, dan kapan menggunakan branch untuk fitur2. 
+
+### Tugas 2
+1. Pertama user membuka page portofolio baru, browser mengirim request ke urls.py. ursl.py ini akan compare dengan url di view yang dipakai dan sesuai. Kemudian view mengambil data dari model dan memasukkan data itu ke context serta template html. Pada template menggunakan loop untuk mengiterasikan dan menampilkan semua isi dari data. Kalau sudah selesai, hasil render template dikirim oleh django dan ditampilkan ke user. 
+
+2. Data untuk bagian portofolio baru sebaiknya disimpan pada model dan tidak ditulis langsung di dalam template karena model memisahkan data dari tampilan yang merupakan konsep MVT pada Django. Dengan ini, data dapat diubah dengan database tanpa harus mengubah kode HTML, sehingga jika projek sudah besar tidak perlu susah susah mencari bagian dan secara manual mengubah satu satu. Juga dengan ini template lebih rapi dan penambahan fitur menjadi lebih mudah.
+
+3. Perbedaan: 
+makemigrations: 
+- Terjadi di lokal
+- Membaca perubahan pada models.py dan membuat code Python di folder migrations/.
+- Tidak ada dampak pada database
+
+migrate:
+- Terjadi di server dan database
+- Run file migrasi yang belum diproses dan mengeksekusi perintah SQL ke database
+- Ada dampak pada database
+
+contoh kasus:
+Saat menambahkan field tags pada model Project untuk menyimpan project dan tech tags. Habis ini python manage.py makemigrations di jalankan di gitbash untuk membuat file migration baru. Kemudian baru python manage.py migrate untuk mengubah pada database itu sendiri.
+
+
+AI DISCLOSURE:
+Overall pengunaan AI sama seperti pada tugas 1 dimana AI yang saya gunakan adalah gemini dan tugas AI tersebut adalah membantu saya dalam hal syntax. Tetapi pada tugas kali ini saya sebagian besar menggunakannya dalam CSS. Untuk html saya mengerjakannya sendiri. Untuk git dan github saya menggunakan AI untuk satu hal yaitu menanyakan tentang cara track branch dengan benar. Ternyata minggu lalu saya lupa untuk push -u sehingga perubahan yang unik untuk branch tersebut tercampur. Jadi untuk kali ini saya memperbaiki hal tersebut. 
