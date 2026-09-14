@@ -117,6 +117,10 @@ class Project(models.Model):
             
         return ""
 
+    @property
+    def display_end_date(self):
+        return self.ended_at or "Current"
+
 
 class Skill(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
