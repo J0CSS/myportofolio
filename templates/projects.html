@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal portfolio of Joshua Carnsyn Suyanto Sidik - Computer Science Student at Universitas Indonesia.">
+    <title> Experience - {{ name  }} - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="site-header" role="banner">
+        <div class="container">
+            <a href="{% url 'main:show_main' %}" class="brand-logo" aria-label="{{ name }} Home Page">{{ name }}</a>
+            <nav>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="#skills">Skills</a>
+                <a href="{% url 'main:show_projects' %}">Projects</a>
+            </nav>
+        </div> 
+    </header>
+
+    <main>
+       <section class="section-block" id="projects" aria-labelledby="projects-heading">
+            <div class="container">
+                <p class="section-kicker">All of my projects</p>
+                <h1 id="projects-heading" class="section-title">Projects</h1>
+
+                <div class="projects-grid">
+                    {% for project in projects %}
+                        <article class="project-card">
+                            <h2>{{ project.title }}</h2>
+                            <p class="project-description">
+                                {{ project.description }}
+                            </p>
+                            <ul class="tech-tags" aria-label="Technologies used">
+                                {% for tech in project.tech_tags.all %}
+                                    <li>{{ tech.name }}</li>
+                                {% empty %}
+                                    <li>No technologies listed</li>
+                                {% endfor %}
+                            </ul>
+                            <p class="project-date">
+                            {{ project.started_at }} - {{ project.display_end_date }}
+                            </p>
+                        </article>
+                    {% empty %}
+                        <div class="empty-projects">
+                            <p>No projects available yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="container">
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+        </div>
+    </footer>
+</body>
+</html>
