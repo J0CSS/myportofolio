@@ -280,10 +280,20 @@ h1, h2, h3, .brand {
 }
 
 /* Projects Section */
-.projects-list {
+/* Base Projects Grid - Single column wide rectangles for Projects page */
+.projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.projects-grid-2col {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.projects-grid-2col .project-card {
+    min-height: 280px;
 }
 
 .project-card {
@@ -320,7 +330,7 @@ h1, h2, h3, .brand {
 }
 
 .project-description {
-    font-size: 0.925rem;
+    font-size: 1.05rem;
     color: var(--text-muted);
     margin-bottom: 1.5rem;
     flex-grow: 1;
@@ -331,6 +341,7 @@ h1, h2, h3, .brand {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .tech-tags li {
@@ -448,5 +459,11 @@ h1, h2, h3, .brand {
 
     .site-header nav {
         gap: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .projects-grid-2col {
+        grid-template-columns: 1fr;
     }
 }
