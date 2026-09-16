@@ -1,5 +1,10 @@
-  {% extends 'base.html' %}
-  {% block content %}
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Projects - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
     <main>
        <section class="section-block" id="projects" aria-labelledby="projects-heading">
             <div class="container">
