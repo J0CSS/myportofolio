@@ -1,32 +1,78 @@
-  {% extends 'base.html' %}
-  {% block content %}
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Projects - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
     <main>
-       <section class="section-block" id="projects" aria-labelledby="projects-heading">
+        <section class="section-block" id="projects" aria-labelledby="projects-heading">
             <div class="container">
                 <p class="section-kicker">All of my projects</p>
-                <h1 id="projects-heading" class="section-title">Projects</h1>
+                
+                <div class="project-header">
+                    <h1 id="projects-heading" class="section-title">Projects</h1>
+                    <a href="{% url 'main:create_project' %}" class="button project-add-button">
+                        <span aria-hidden="true">+</span> Tambah Proyek
+                    </a>
+                </div>
+
+                <form method="get" action="{% url 'main:show_projects' %}" class="project-search">
+                    <input type="search"
+                           name="title"
+                           value="{{ title_query }}"
+                           placeholder="Cari berdasarkan nama proyek"
+                           class="project-search__input"
+                           aria-label="Cari berdasarkan nama proyek">
+                    <button type="submit" class="button">Cari</button>
+                </form>
 
                 <div class="projects-grid">
                     {% for project in projects %}
                         <article class="project-card">
+                            {% if project.project_image_url %}
+                                <img src="{{ project.project_image_url }}" alt="{{ project.title }} preview" class="project-image">
+                            {% endif %}
+
                             <h2>{{ project.title }}</h2>
                             <p class="project-description">
                                 {{ project.description }}
                             </p>
+
                             <ul class="tech-tags" aria-label="Technologies used">
                                 {% for tech in project.tech_tags.all %}
                                     <li>{{ tech.name }}</li>
                                 {% empty %}
-                                    <li>No technologies listed</li>
+                                    {% if project.tech_stack %}
+                                        <li>{{ project.tech_stack }}</li>
+                                    {% else %}
+                                        <li>No technologies listed</li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
-                            <p class="project-date">
-                            {{ project.started_at }} - {{ project.display_end_date }}
-                            </p>
+
+                            {% if project.started_at %}
+                                <p class="project-date">
+                                    {{ project.started_at }} - {{ project.display_end_date }}
+                                </p>
+                            {% endif %}
+
+                            <div class="project-card-actions">
+                                <div class="project-actions">
+                                    {% if project.project_url %}
+                                        <a href="{{ project.project_url }}" class="button">Lihat Project</a>
+                                    {% endif %}
+                                    {% include "components/project_delete_modal.html" with project=project %}
+                                </div>
+                            </div>
                         </article>
                     {% empty %}
                         <div class="empty-projects">
-                            <p>No projects available yet.</p>
+                            {% if title_query %}
+                                <p>Tidak ada proyek dengan nama tersebut.</p>
+                            {% else %}
+                                <p>No projects available yet.</p>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>

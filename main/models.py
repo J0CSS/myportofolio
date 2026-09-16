@@ -72,7 +72,9 @@ class Project(models.Model):
     project_tags = models.ManyToManyField(ProjectTag, blank=True)
     tech_tags = models.ManyToManyField(TechTag, blank=True)
 
-    thumbnail = models.URLField(blank=True, null=True)
+    project_url = models.URLField(blank=True)
+    project_image_url = models.URLField(blank=True, max_length=500)
+
     started_at = models.DateField(default=timezone.now)
     ended_at = models.DateField(blank=True, null=True)
 
