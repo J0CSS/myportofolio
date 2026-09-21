@@ -63,6 +63,10 @@ class Experience(models.Model):
     def is_ongoing(self):
         return self.ended_at is None
 
+    @property
+    def display_end_date(self):
+        return self.ended_at or "Current"
+
 
 class Project(models.Model):    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
