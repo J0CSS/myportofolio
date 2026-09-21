@@ -374,8 +374,32 @@ h1, h2, h3, .brand {
     margin-bottom: 1rem;
 }
 
-/* Projects Header & Search */
-.project-header {
+.button-sm {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8rem;
+}
+
+.project-actions,
+.experience-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.project-actions__group,
+.experience-actions__group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: auto; 
+}
+
+/* Projects,Experiences Header & Search */
+.project-header,
+.experience-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -384,28 +408,33 @@ h1, h2, h3, .brand {
     margin-bottom: 1.5rem;
 }
 
-.project-header h1 {
+.project-header h1,
+.experience-header h1 {
     margin-bottom: 0;
 }
 
-.project-add-button {
+.project-add-button,
+.experience-add-button {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
 }
 
-.project-add-button span {
+.project-add-button span,
+.experience-add-button span {
     font-size: 1.25rem;
     line-height: 1;
 }
 
-.project-search {
+.project-search,
+.experience-search {
     display: flex;
     gap: 0.75rem;
     margin-bottom: 1.5rem;
 }
 
-.project-search__input {
+.project-search__input,
+.experience-search__input {
     width: 100%;
     min-width: 0;
     padding: 0.7rem;
@@ -416,7 +445,8 @@ h1, h2, h3, .brand {
     font: inherit;
 }
 
-.project-search__input:focus {
+.project-search__input:focus,
+.experience-search__input:focus {
     outline: 2px solid var(--accent);
     border-color: var(--accent);
 }
@@ -446,6 +476,7 @@ h1, h2, h3, .brand {
 }
 
 /* Delete Modal & Popover */
+.experience-delete-modal,
 .project-delete-modal {
     display: none;
     position: fixed;
@@ -462,11 +493,12 @@ h1, h2, h3, .brand {
     align-items: center;
     justify-content: center;
 }
-
+.experience-delete-modal:popover-open,
 .project-delete-modal:popover-open {
     display: flex;
 }
 
+.experience-delete-modal__backdrop,
 .project-delete-modal__backdrop {
     position: absolute;
     inset: 0;
@@ -478,6 +510,7 @@ h1, h2, h3, .brand {
     cursor: default;
 }
 
+.experience-delete-modal__content,
 .project-delete-modal__content {
     position: relative;
     z-index: 1;
@@ -489,12 +522,14 @@ h1, h2, h3, .brand {
     box-shadow: 0 1rem 3rem rgba(28, 25, 23, 0.22);
 }
 
+.experience-delete-modal__content h2,
 .project-delete-modal__content h2 {
     margin: 0 0 0.75rem;
     font-family: "Space Grotesk", -apple-system, sans-serif;
     font-size: 1.5rem;
 }
 
+.experience-delete-modal__close,
 .project-delete-modal__close {
     position: absolute;
     top: 1rem;
@@ -508,6 +543,7 @@ h1, h2, h3, .brand {
     cursor: pointer;
 }
 
+.experience-delete-modal__actions,
 .project-delete-modal__actions {
     display: flex;
     justify-content: flex-end;
@@ -516,6 +552,7 @@ h1, h2, h3, .brand {
 }
 
 /* Form Styles */
+.experience-form,
 .project-form {
     width: 100%;
     max-width: 100%;
@@ -657,39 +694,47 @@ h1, h2, h3, .brand {
 }
 
 @media (max-width: 600px) {
+    .experience-header,
     .project-header {
         align-items: flex-start;
         flex-direction: column;
     }
 
+    .experience-add-button,
     .project-add-button {
         width: 100%;
         justify-content: center;
     }
 
+    .experience-search,
     .project-search {
         flex-direction: column;
     }
 
+    .experience-search .button,
     .project-search .button {
         width: 100%;
     }
 
+    .experience-delete-modal,
     .project-delete-modal {
         align-items: flex-end;
         padding: 0;
     }
 
+    .experience-delete-modal__content,
     .project-delete-modal__content {
         width: 100%;
         padding: 1.25rem;
         border-radius: var(--radius) var(--radius) 0 0;
     }
 
+    .experience-delete-modal__actions,
     .project-delete-modal__actions {
         flex-direction: column-reverse;
     }
 
+    .experience-delete-modal__actions .button,
     .project-delete-modal__actions .button {
         width: 100%;
         text-align: center;

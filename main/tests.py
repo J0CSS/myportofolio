@@ -35,7 +35,7 @@ class MainTest(TestCase):
         response = self.client.get(reverse("main:show_experience"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "experience.html")
+        self.assertTemplateUsed(response, "experiences.html")
         self.assertContains(response, self.experience.title)
         self.assertContains(response, self.experience.description)
         self.assertContains(response, "Part-Time")

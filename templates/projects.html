@@ -62,7 +62,12 @@
                                     {% if project.project_url %}
                                         <a href="{{ project.project_url }}" class="button">Lihat Project</a>
                                     {% endif %}
-                                    {% include "components/project_delete_modal.html" with project=project %}
+
+                                    <!-- Pembungkus yang benar -->
+                                    <div class="project-actions__group">
+                                        <a href="{% url 'main:edit_project' project.id %}" class="button button-sm button-danger">Edit</a>
+                                        {% include "components/project_delete_modal.html" with project=project %}
+                                    </div>
                                 </div>
                             </div>
                         </article>
