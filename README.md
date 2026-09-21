@@ -42,3 +42,14 @@ Saat menambahkan field tags pada model Project untuk menyimpan project dan tech 
 
 AI DISCLOSURE:
 Overall pengunaan AI sama seperti pada tugas 1 dimana AI yang saya gunakan adalah gemini dan tugas AI tersebut adalah membantu saya dalam hal syntax. Tetapi pada tugas kali ini saya sebagian besar menggunakannya dalam CSS. Untuk html saya mengerjakannya sendiri. Untuk git dan github saya menggunakan AI untuk satu hal yaitu menanyakan tentang cara track branch dengan benar. Ternyata minggu lalu saya lupa untuk push -u sehingga perubahan yang unik untuk branch tersebut tercampur. Jadi untuk kali ini saya memperbaiki hal tersebut. 
+
+### Tugas 3
+1. Penggunaan ModelForm agar otomatis membuat elemen form, validasi data, serta pembaruan database secara langsung. Untuk {% csrf_token %} digunakan untuk melindungi aplikasi dari CSRF dengan cara menggunakan token unik yang diverifikasi oleh middleware server sehingga dapat memastikan setiap permintaan pengiriman data berasal dari pengguna di situs tersebut, bukan dari pihak ketiga.
+
+2. JSON lebih disukai karena sintaks lebih ringan (lightweight), parsing yang lebih baik, dan integrasi lebih mudah dengan bahasa JavaScript.
+
+3. Saat user request data portofolio, view di Django akan mengambil query set dari database, lalu balikin kembali ke klien sebagai respon HTTP berformat JSON agar dapat langsung dibaca oleh JavaScript. Proses serialization diwajibkan dalam alur ini karena objek model Django merupakan struktur objek Python yang mencakup metode internal, relasi ORM, hingga tipe data khusus seperti datetime. Sehingga tidak dapat dikonversi secara otomatis oleh JSON standar. Serialization bertugas mengambil dan memilih fields data tersebut menjadi tipe data dasar Python yang akan dapat diubah menjadi format JSON.
+
+
+AI DISCLOSURE:
+Overall pengunaan AI semakin sedikit dibandingkan tugas sebelumnya. AI yang saya gunakan tetap gemini dan tugas AI tersebut dalam minggu ini adalah mengajari saya untuk fitur update. Dimana saya baru mengetahui bahwa form tidak perlu buat baru untuk create dan update.  Untuk git dan github saya menggunakan AI untuk satu hal yaitu menanyakan pada saat terakhir proses push. Dimana saat pertama kali saya selesai semua dan push pws main, web tidak berubah. Ternyata di branch setelah push -u origin harus di push lagi. Setelah itu web berjalan dengan baik
