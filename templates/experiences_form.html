@@ -1,15 +1,13 @@
 {% extends "base.html" %}
-
 {% block meta %}
-    <title>{{ page_title|default:"Add Project" }} - {{ name }}</title>
+   <title>{{ page_title|default:"Add Experience" }} - {{ name }}</title>
 {% endblock meta %}
-
 {% block content %}
     <main>
-        <section class="project-section">
+        <section class="experience-section">
             <div class="container">
-                <h1>{{ page_title|default:"Add New Project" }}</h1>
-                <form method="post" class="project-form">
+                <h1>{{ page_title|default:"Tambah Experience" }}</h1>
+                <form method="post" class="experience-form">
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="form-group">
@@ -20,12 +18,10 @@
                             {% endfor %}
                         </div>
                     {% endfor %}
-                    
                     <button type="submit" class="button">
-                        {{ button_text|default:"Tambah Project" }}
+                        {{ button_text|default:"Tambah Experience" }}
                     </button>
-
-                    <a href="{% url 'main:show_projects' %}" class="button button-secondary">Batal</a>
+                    <a href="{% url 'main:show_experiences' %}" class="button button-secondary">Batal</a>
                 </form>
             </div>
         </section>
