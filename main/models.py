@@ -1,5 +1,6 @@
 import re
 import uuid
+from django.contrib.auth.models import User  
 from django.db import models
 from django.utils import timezone
 
@@ -81,6 +82,10 @@ class Project(models.Model):
 
     started_at = models.DateField(default=timezone.now)
     ended_at = models.DateField(blank=True, null=True)
+
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_projects", blank=True
+    )
 
     is_featured = models.BooleanField(
         default=False, 

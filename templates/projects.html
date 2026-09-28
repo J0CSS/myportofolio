@@ -11,10 +11,12 @@
                 <p class="section-kicker">All of my projects</p>
                 
                 <div class="project-header">
-                    <h1 id="projects-heading" class="section-title">Projects</h1>
-                    <a href="{% url 'main:create_project' %}" class="button project-add-button">
-                        <span aria-hidden="true">+</span> Tambah Proyek
-                    </a>
+                    {% if user.is_superuser %}
+                        <h1 id="projects-heading" class="section-title">Projects</h1>
+                        <a href="{% url 'main:create_project' %}" class="button project-add-button">
+                            <span aria-hidden="true">+</span> Tambah Proyek
+                        </a>
+                    {% endif %}
                 </div>
 
                 <form method="get" action="{% url 'main:show_projects' %}" class="project-search">
@@ -66,7 +68,10 @@
                                     <!-- Pembungkus yang benar -->
                                     <div class="project-actions__group">
                                         <a href="{% url 'main:edit_project' project.id %}" class="button button-sm button-danger">Edit</a>
-                                        {% include "components/project_delete_modal.html" with project=project %}
+                                        {% include "components/project_star.html" with project=project %}
+                                        {% if user.is_superuser %}
+                                            {% include "components/project_delete_modal.html" with project=project %}
+                                        {% endif %}          
                                     </div>
                                 </div>
                             </div>
