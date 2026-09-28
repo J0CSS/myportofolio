@@ -54,6 +54,8 @@
 
                                     <!-- Grouping Tombol Edit & Hapus -->
                                     <div class="experience-actions__group">
+                                        {% include "components/experience_star.html" with experience=experience %}
+
                                         {% if user.is_superuser or is_editor %}
                                             <a href="{% url 'main:edit_experience' experience.id %}" class="button button-sm button-danger">Edit</a>
                                         {% endif %}
