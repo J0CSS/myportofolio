@@ -73,7 +73,9 @@ def get_experiences_json(request):
     if title_query:
         experiences = experiences.filter(title__icontains=title_query)
 
-    experiences_json = serializers.serialize("json", expereiences)
+    experiences_json = serializers.serialize(
+        "json", experiences, use_natural_foreign_keys=True  # Tambahkan argumen ini
+    )
     return HttpResponse(experiences_json, content_type="application/json")
 
 @login_required(login_url="/login/")
@@ -110,6 +112,19 @@ def edit_experience(request, id):
     }
 
     return render(request, 'experiences_form.html', context)
+
+@login_required(login_url="/login/")
+def experience_toggle_star(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        if request.user in experience.starred_by.all():
+            experience.starred_by.remove(request.user)
+        else:
+            experience.starred_by.add(request.user)
+
+    return redirect("main:show_experiences")
+
 
 # PROJECTS
 def show_projects(request):
@@ -196,6 +211,19 @@ def edit_project(request, id):
 
     return render(request, 'projects_form.html', context)
 
+
+@login_required(login_url="/login/")
+def project_toggle_star(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        if request.user in project.starred_by.all():
+            project.starred_by.remove(request.user)
+        else:
+            project.starred_by.add(request.user)
+
+    return redirect("main:show_projects")
+
 # USER
 def register(request):
     form = UserCreationForm(request.POST or None)
@@ -235,15 +263,3 @@ def logout_user(request):
 
 def is_editor(user):
     return user.groups.filter(name="Editor").exists()
-
-@login_required(login_url="/login/")
-def toggle_star(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
-
-    if request.method == "POST":
-        if request.user in project.starred_by.all():
-            project.starred_by.remove(request.user)
-        else:
-            project.starred_by.add(request.user)
-
-    return redirect("main:show_projects")
