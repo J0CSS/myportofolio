@@ -47,7 +47,11 @@ def show_experiences(request):
     }
     return render(request, "experiences.html", context)
 
+@login_required(login_url="/login/")  
 def create_experience(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     form = ExperienceForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
@@ -71,7 +75,11 @@ def get_experiences_json(request):
     experiences_json = serializers.serialize("json", expereiences)
     return HttpResponse(experiences_json, content_type="application/json")
 
+@login_required(login_url="/login/")
 def delete_experience(request, experience_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     experience = get_object_or_404(Experience, pk=experience_id)
 
     if request.method == "POST":
@@ -81,7 +89,11 @@ def delete_experience(request, experience_id):
 
     return redirect("main:show_experiences")
 
+@login_required(login_url="/login/")
 def edit_experience(request, id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     experience = get_object_or_404(Experience, pk=id)
     
     form = ExperienceForm(request.POST or None, instance=experience)
@@ -161,7 +173,11 @@ def delete_project(request, project_id):
 
     return redirect("main:show_projects")
 
+@login_required(login_url="/login/")
 def edit_project(request, id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     project = get_object_or_404(Project, pk=id)
     
     form = ProjectForm(request.POST or None, instance=project)
