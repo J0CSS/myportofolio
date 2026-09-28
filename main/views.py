@@ -68,7 +68,7 @@ def create_experience(request):
 
 def get_experiences_json(request):
     title_query = request.GET.get("title", "").strip()
-    expereiences = Experience.objects.all()
+    experiences = Experience.objects.all()
 
     if title_query:
         experiences = experiences.filter(title__icontains=title_query)
