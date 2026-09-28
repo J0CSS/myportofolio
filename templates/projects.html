@@ -68,8 +68,12 @@
                                     <!-- Pembungkus yang benar -->
                                     <div class="project-actions__group">
                                         {% include "components/project_star.html" with project=project %}
-                                        {% if user.is_superuser %}
+
+                                        {% if user.is_superuser or is_editor %}
                                             <a href="{% url 'main:edit_project' project.id %}" class="button button-sm button-danger">Edit</a>
+                                        {% endif %}
+
+                                        {% if user.is_superuser %}
                                             {% include "components/project_delete_modal.html" with project=project %}
                                         {% endif %}          
                                     </div>
