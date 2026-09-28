@@ -53,3 +53,6 @@ Overall pengunaan AI sama seperti pada tugas 1 dimana AI yang saya gunakan adala
 
 AI DISCLOSURE:
 Overall pengunaan AI semakin sedikit dibandingkan tugas sebelumnya. AI yang saya gunakan tetap gemini dan tugas AI tersebut dalam minggu ini adalah mengajari saya untuk fitur update. Dimana saya baru mengetahui bahwa form tidak perlu buat baru untuk create dan update.  Untuk git dan github saya menggunakan AI untuk satu hal yaitu menanyakan pada saat terakhir proses push. Dimana saat pertama kali saya selesai semua dan push pws main, web tidak berubah. Ternyata di branch setelah push -u origin harus di push lagi. Setelah itu web berjalan dengan baik
+
+### Tugas 4
+Penggunaan AI hanya pada git. Terutama saat saya tidak sengaja pull origin main di dalam branch, sehingga harus gir reset --hard untuk balik ke commit dan push sebelumnya. 
