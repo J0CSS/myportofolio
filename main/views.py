@@ -6,7 +6,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required 
 from django.core.exceptions import PermissionDenied 
-from django.http import JsonResponse      
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST      
 import datetime
 
 from main.models import Experience, Project, Skill
@@ -135,6 +136,7 @@ def show_projects(request):
         "name": "Joshua Carnsyn.S.S",
         "title_query": title_query,
         "is_editor": is_editor(request.user),
+        "form": ProjectForm(),
     }
     return render(request, "projects.html", context)
 
@@ -155,6 +157,24 @@ def create_project(request):
         "form": form,
     }
     return render(request, "projects_form.html", context)
+
+@require_POST
+def create_project_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan proyek."},
+            status=403,
+        )
+
+    form = ProjectForm(request.POST)
+    if form.is_valid():
+        project = form.save()
+        return JsonResponse(
+            {"message": "Proyek berhasil ditambahkan.", "pk": str(project.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
 
 def get_projects_json(request):
     title_query = request.GET.get("title", "").strip()
