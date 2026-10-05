@@ -105,7 +105,7 @@
             : '';
 
         const datesHtml = experience.started_at
-            ? `<p class="experience-date">${escapeHtml(experience.started_at)} - ${escapeHtml(experience.ended_at || experience.display_end_date || 'Present')}</p>`
+            ? `<p class="experience-date">${escapeHtml(experience.started_at)} - ${escapeHtml(experience.ended_at || 'Present')}</p>`
             : '';
 
         // Template URL aksi dengan placeholder UUID
