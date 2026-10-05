@@ -38,6 +38,7 @@ def show_experiences(request):
         "name": "Joshua Carnsyn.S.S",
         "title_query": title_query,
         "is_editor": is_editor(request.user), 
+        "form": ExperienceForm(),
     }
     
     return render(request, "experiences.html", context)
@@ -60,6 +61,25 @@ def create_experience(request):
     }
     return render(request, "experiences_form.html", context)
 
+@require_POST
+def create_experience_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan experience."},
+            status=403,
+        )
+
+    form = ExperienceForm(request.POST)
+    if form.is_valid():
+        experience = form.save()
+        return JsonResponse(
+            {"message": "Experience berhasil ditambahkan.", "pk": str(experience.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+
 def get_experiences_json(request):
     title_query = request.GET.get("title", "").strip()
     experiences = Experience.objects.prefetch_related('starred_by').all()
@@ -77,6 +97,8 @@ def get_experiences_json(request):
             "pk": str(exp.id),
             "fields": {
                 "title": exp.title,
+                "description": exp.description,
+                "thumbnail": exp.thumbnail,
                 "category": exp.category,
                 "category_display": exp.get_category_display(),
                 "started_at": exp.started_at.strftime('%b %Y') if hasattr(exp, 'started_at') and exp.started_at else "",
