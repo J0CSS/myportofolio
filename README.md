@@ -56,3 +56,16 @@ Overall pengunaan AI semakin sedikit dibandingkan tugas sebelumnya. AI yang saya
 
 ### Tugas 4
 Penggunaan AI hanya pada git. Terutama saat saya tidak sengaja pull origin main di dalam branch, sehingga harus gir reset --hard untuk balik ke commit dan push sebelumnya. 
+
+### Tugas 5
+Jelaskan apa itu debouncing dan mengapa teknik ini penting diterapkan pada fitur pencarian yang menggunakan AJAX!
+
+Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+
+Jelaskan apa itu serangan XSS (Cross-Site Scripting) dan mengapa data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini daripada data yang ditampilkan langsung melalui template Django!\
+
+1. Debouncing adalah teknik untuk mendelay sebuah function hingga suatu jeda waktu berlalu tanpa event baru. Jadi saat pengguna masih mengetik, timer sebelumnya dibatalkan dan dimulai lagi. Dengan demikian, browser hanya mengirim permintaan setelah pengguna berhenti mengetik selama sejenak. Teknik ini penting untuk mengurangi http request dan pencegahan race condition.
+
+2. Fungsi await ketika ketika kita menggunakan fetch() adalah untuk mendelay eksekusi code berikutnya di dalam fungsi async hingga promise dari fetch() selesai. Jika kita tidak menggunakan await fetch() akan langsung mengembalikan promise (status: pending), seharusnya promise isinya data. 
+
+3. Serangan XSS adalah serangan yang dilakukan dengan memasukkan skrip/kode ke dalam konten aplikasi, jika tidak dihandle maka kode tersebut dapat dieksekusi oleh suer lain saat mengakses halaman tersebut.data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini daripada data yang ditampilkan langsung melalui template Django karena Django sudah menghandle security untuk serangan XSS secara otomatis dengan auto escaping pada varibale yang di render.
