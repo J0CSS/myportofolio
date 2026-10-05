@@ -32,22 +32,14 @@ def show_main(request):
 
 # EXPERIENCES
 def show_experiences(request):
-    json_response = get_experiences_json(request)                       
-
-    deserialized_data = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    experiences = [item.object for item in deserialized_data]
     title_query = request.GET.get("title", "").strip()
 
     context = {
         "name": "Joshua Carnsyn.S.S",
-        "projects": experiences,
-        "experience_list": experiences,
         "title_query": title_query,
-        "is_editor" : is_editor(request.user), 
+        "is_editor": is_editor(request.user), 
     }
+    
     return render(request, "experiences.html", context)
 
 @login_required(login_url="/login/")  
@@ -70,15 +62,31 @@ def create_experience(request):
 
 def get_experiences_json(request):
     title_query = request.GET.get("title", "").strip()
-    experiences = Experience.objects.all()
+    experiences = Experience.objects.prefetch_related('starred_by').all()
 
     if title_query:
         experiences = experiences.filter(title__icontains=title_query)
 
-    experiences_json = serializers.serialize(
-        "json", experiences, use_natural_foreign_keys=True  # Tambahkan argumen ini
-    )
-    return HttpResponse(experiences_json, content_type="application/json")
+    data = []
+    for exp in experiences:
+        starred_users = exp.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([u.username for u in starred_users])
+
+        data.append({
+            "pk": str(exp.id),
+            "fields": {
+                "title": exp.title,
+                "category": exp.category,
+                "category_display": exp.get_category_display(),
+                "started_at": exp.started_at.strftime('%b %Y') if hasattr(exp, 'started_at') and exp.started_at else "",
+                "ended_at": exp.ended_at.strftime('%b %Y') if hasattr(exp, 'ended_at') and exp.ended_at else "Present",
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+    return JsonResponse(data, safe=False)
 
 @login_required(login_url="/login/")
 def delete_experience(request, experience_id):
@@ -242,7 +250,6 @@ def edit_project(request, id):
     }
 
     return render(request, 'projects_form.html', context)
-
 
 @login_required(login_url="/login/")
 def project_toggle_star(request, project_id):
