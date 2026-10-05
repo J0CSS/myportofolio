@@ -38,6 +38,7 @@ def show_experiences(request):
         "name": "Joshua Carnsyn.S.S",
         "title_query": title_query,
         "is_editor": is_editor(request.user), 
+        "form": ExperienceForm(),
     }
     
     return render(request, "experiences.html", context)

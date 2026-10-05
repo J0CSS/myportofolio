@@ -13,9 +13,12 @@
                 <div class="experience-header">
                     {% if user.is_superuser %}
                         <h1 id="experiences-heading" class="section-title">Experiences</h1>
-                        <a href="{% url 'main:create_experience' %}" class="button experience-add-button">
-                            <span aria-hidden="true">+</span> Tambah Experience
-                        </a>
+                        <button type="button"
+                                class="button experience-add-button"
+                                popovertarget="add-experience-modal">
+                            <span aria-hidden="true">+</span>
+                            Tambah Experience
+                        </button>
                     {% endif %}
                 </div>
 
@@ -48,6 +51,10 @@
             </div>
         </section>
     </main>
+
+    {% if user.is_superuser %}
+        {% include "components/experience_form_modal.html" %}
+    {% endif %}
 
     <script>
     const BASE_EXPERIENCES_ENDPOINT = "{% url 'main:get_experiences_json' %}";
@@ -209,6 +216,10 @@
         clearTimeout(searchDebounceTimer);
         searchExperiences();
     });
+
+    function closeExperienceModal() {
+        document.getElementById("add-experience-modal").hidePopover();
+    }
 
     fetchExperiences(searchInput.value.trim());
     </script>
