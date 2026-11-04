@@ -51,7 +51,7 @@ class Experience(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='full-time')
     thumbnail = models.URLField(blank=True, null=True)
-    started_at = models.DateField(default=timezone.now)
+    started_at = models.DateField(default=timezone.localdate)
     ended_at = models.DateField(blank=True, null=True)
     starred_by = models.ManyToManyField(
         User, related_name="starred_experiences", blank=True
@@ -83,7 +83,7 @@ class Project(models.Model):
     project_url = models.URLField(blank=True)
     project_image_url = models.URLField(blank=True, max_length=500)
 
-    started_at = models.DateField(default=timezone.now)
+    started_at = models.DateField(default=timezone.localdate)
     ended_at = models.DateField(blank=True, null=True)
 
     starred_by = models.ManyToManyField(
@@ -147,7 +147,7 @@ class Skill(models.Model):
     category = models.ManyToManyField(SkillTag, blank=True)
     
     thumbnail = models.URLField(blank=True, null=True)
-    started_at = models.DateField(default=timezone.now, blank=True, null=True)
+    started_at = models.DateField(default=timezone.localdate, blank=True, null=True)
     icon = models.CharField(max_length=50, blank=True, default="⚡", help_text="Emoji or icon identifier")
 
     class Meta:

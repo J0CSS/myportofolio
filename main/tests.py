@@ -19,7 +19,7 @@ class MainTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "index.html")
         self.assertNotContains(response, self.experience.title)
-        self.assertContains(response, f'href="{reverse("main:show_experience")}"')
+        self.assertContains(response, f'href="{reverse("main:show_experiences")}"')
 
     def test_nonexistent_page_returns_404(self):
         response = self.client.get("/halaman-yang-tidak-ada/")
@@ -32,30 +32,31 @@ class MainTest(TestCase):
         self.assertTrue(self.experience.is_ongoing)
 
     def test_experience_page(self):
-        response = self.client.get(reverse("main:show_experience"))
+        response = self.client.get(reverse("main:show_experiences"))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "experiences.html")
-        self.assertContains(response, self.experience.title)
-        self.assertContains(response, self.experience.description)
-        self.assertContains(response, "Part-Time")
-        self.assertContains(response, "Sedang berlangsung")
+        self.assertContains(response, reverse("api:experience-list"))
+        api_response = self.client.get(reverse("api:experience-list"))
+        experience_data = api_response.json()[0]
+        self.assertEqual(experience_data["title"], self.experience.title)
+        self.assertEqual(experience_data["description"], self.experience.description)
+        self.assertEqual(experience_data["category_display"], "Part-Time")
         self.assertContains(response, f'href="{reverse("main:show_main")}"')
 
     def test_empty_experience_page(self):
         Experience.objects.all().delete()
-        response = self.client.get(reverse("main:show_experience"))
+        response = self.client.get(reverse("main:show_experiences"))
 
-        self.assertContains(response, "Belum ada pengalaman yang ditambahkan.")
+        self.assertContains(response, "Belum ada experience yang ditambahkan atau ditemukan.")
 
     def test_completed_experience(self):
-        self.experience.ended_at = timezone.now()
+        self.experience.ended_at = timezone.localdate()
         self.experience.save()
-        response = self.client.get(reverse("main:show_experience"))
 
         self.assertFalse(self.experience.is_ongoing)
-        self.assertContains(response, "Selesai")
-        self.assertNotContains(response, "Sedang berlangsung")
+        response = self.client.get(reverse("api:experience-list"))
+        self.assertEqual(response.json()[0]["ended_at"], timezone.localdate().isoformat())
 
 class ProjectPageTest(TestCase):
 
@@ -76,13 +77,18 @@ class ProjectPageTest(TestCase):
         response = self.client.get(reverse("main:show_projects"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, project.title)
-        self.assertContains(response, project.description)
-        self.assertContains(response, "Python")
-        self.assertContains(response, "Current")
+        self.assertContains(response, reverse("api:project-list"))
+        api_response = self.client.get(reverse("api:project-list"))
+        project_data = api_response.json()[0]
+        self.assertEqual(project_data["title"], project.title)
+        self.assertEqual(project_data["description"], project.description)
+        self.assertEqual(project_data["tech_tag_names"], ["Python"])
+        self.assertIsNone(project_data["ended_at"])
 
     def test_empty_project_message_appears(self):
         response = self.client.get(reverse("main:show_projects"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No projects available yet.")
+        self.assertContains(response, "Belum ada proyek yang ditambahkan atau ditemukan.")
+        api_response = self.client.get(reverse("api:project-list"))
+        self.assertEqual(api_response.json(), [])
