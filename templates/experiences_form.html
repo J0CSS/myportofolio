@@ -7,7 +7,12 @@
         <section class="experience-section">
             <div class="container">
                 <h1>{{ page_title|default:"Tambah Experience" }}</h1>
-                <form method="post" class="experience-form">
+                <form
+                    id="experience-form"
+                    method="post"
+                    class="experience-form"
+                    data-api-url="{% if experience_id %}{% url 'api:experience-detail' experience_id %}{% endif %}"
+                >
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="form-group">
@@ -23,6 +28,87 @@
                     </button>
                     <a href="{% url 'main:show_experiences' %}" class="button button-secondary">Batal</a>
                 </form>
+
+                <script>
+                    const experienceForm = document.getElementById("experience-form");
+                    const experienceApiUrl = experienceForm.dataset.apiUrl;
+
+                    // The create form has no API URL, so it keeps its existing POST behavior.
+                    if (experienceApiUrl) {
+                        function getCookie(name) {
+                            const prefix = `${name}=`;
+                            const cookie = document.cookie
+                                .split(";")
+                                .map(value => value.trim())
+                                .find(value => value.startsWith(prefix));
+
+                            return cookie
+                                ? decodeURIComponent(cookie.slice(prefix.length))
+                                : null;
+                        }
+
+                        experienceForm.addEventListener("submit", async function (event) {
+                            event.preventDefault();
+
+                            const submitButton = experienceForm.querySelector(
+                                'button[type="submit"]'
+                            );
+                            submitButton.disabled = true;
+
+                            try {
+                                const fields = new FormData(experienceForm);
+                                const payload = {
+                                    title: fields.get("title") || "",
+                                    description: fields.get("description") || "",
+                                    category: fields.get("category"),
+                                    thumbnail: fields.get("thumbnail") || "",
+                                    ended_at: fields.get("ended_at") || null,
+                                };
+
+                                const startedAt = fields.get("started_at");
+                                if (startedAt) {
+                                    payload.started_at = startedAt;
+                                }
+
+                                const response = await fetch(experienceApiUrl, {
+                                    method: "PATCH",
+                                    headers: {
+                                        Accept: "application/json",
+                                        "Content-Type": "application/json",
+                                        "X-CSRFToken": getCookie("csrftoken") || "",
+                                    },
+                                    body: JSON.stringify(payload),
+                                });
+
+                                const data = await response.json().catch(() => ({}));
+
+                                if (!response.ok) {
+                                    const messages = Object.values(data)
+                                        .flatMap(value => Array.isArray(value) ? value : [value])
+                                        .filter(value => typeof value === "string");
+
+                                    throw new Error(
+                                        messages.join(" ") || `Request gagal (HTTP ${response.status}).`
+                                    );
+                                }
+
+                                showToast(
+                                    "Berhasil",
+                                    "Experience berhasil diperbarui.",
+                                    "success"
+                                );
+                            } catch (error) {
+                                showToast(
+                                    "Gagal memperbarui experience",
+                                    error.message,
+                                    "error"
+                                );
+                            } finally {
+                                submitButton.disabled = false;
+                            }
+                        });
+                    }
+                </script>
             </div>
         </section>
     </main>

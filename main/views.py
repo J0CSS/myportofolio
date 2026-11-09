@@ -140,7 +140,8 @@ def edit_experience(request, id):
     context = {
         'form': form,
         'page_title': 'Edit Experience',
-        'button_text': 'Simpan Perubahan'
+        'button_text': 'Simpan Perubahan',
+        "experience_id": experience.id,
     }
 
     return render(request, 'experiences_form.html', context)
