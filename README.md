@@ -58,14 +58,30 @@ Overall pengunaan AI semakin sedikit dibandingkan tugas sebelumnya. AI yang saya
 Penggunaan AI hanya pada git. Terutama saat saya tidak sengaja pull origin main di dalam branch, sehingga harus gir reset --hard untuk balik ke commit dan push sebelumnya. 
 
 ### Tugas 5
-Jelaskan apa itu debouncing dan mengapa teknik ini penting diterapkan pada fitur pencarian yang menggunakan AJAX!
-
-Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
-
-Jelaskan apa itu serangan XSS (Cross-Site Scripting) dan mengapa data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini daripada data yang ditampilkan langsung melalui template Django!\
-
 1. Debouncing adalah teknik untuk mendelay sebuah function hingga suatu jeda waktu berlalu tanpa event baru. Jadi saat pengguna masih mengetik, timer sebelumnya dibatalkan dan dimulai lagi. Dengan demikian, browser hanya mengirim permintaan setelah pengguna berhenti mengetik selama sejenak. Teknik ini penting untuk mengurangi http request dan pencegahan race condition.
 
 2. Fungsi await ketika ketika kita menggunakan fetch() adalah untuk mendelay eksekusi code berikutnya di dalam fungsi async hingga promise dari fetch() selesai. Jika kita tidak menggunakan await fetch() akan langsung mengembalikan promise (status: pending), seharusnya promise isinya data. 
 
 3. Serangan XSS adalah serangan yang dilakukan dengan memasukkan skrip/kode ke dalam konten aplikasi, jika tidak dihandle maka kode tersebut dapat dieksekusi oleh suer lain saat mengakses halaman tersebut.data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini daripada data yang ditampilkan langsung melalui template Django karena Django sudah menghandle security untuk serangan XSS secara otomatis dengan auto escaping pada varibale yang di render.
+
+### Tugas 6
+1. REST adalah suatu arsitektur untuk merancang sistem web. API yang mengikuti REST membuat data sebagai resource dengan alamat yang konsisten, memakai metode HTTP, dan bertukar representasi resource. REST juga memiliki batasan seperti statelessness, ui yang mirip, dan kemampuan caching. 
+
+JSON hanya salah satu format representasi. Jadi, API yang mengirim JSON belum tentu RESTful; misalnya, API yang memakai URL seperti /deleteSkill/5/ untuk menjalankan aksi masih bisa mengikuti pola RPC meskipun responsnya JSON. 
+
+Contohnya, mengirim seluruh data Skill ke /api/v1/skills/<uuid>/ dengan PUT. PATCH digunakan untuk mengubah sebagian data. Contohnya, mengirim {"title": "Django"} dengan PATCH sehingga judul Skill yang berubah. RFC 9110 tentang PUT, RFC 5789 tentang PATCH
+
+2. Serializer membuat objek model Django menjadi data primitif yang bisa dirender sebagai JSON. Serializer membaca dan memvalidasi data dari klien sebelum data disimpan atau dipakai untuk memperbarui model. ModelSerializer juga dapat membuat field dari model dan menyediakan operasi dasar untuk membuat dan memperbarui objek. Dokumentasi serializer DRF
+
+Dibanding merakit dictionary secara manual dengan JsonResponse, serializer mengurangi kode repetitif untuk pemetaan field, relasi, dan validasi. Daftar fields juga bikin respons lebih jelas dan field model baru tidak ikut terlihat secara tidak sengaja. Jika validasi gagal dan view memanggil is_valid(raise_exception=True), DRF mengembalikan respons 400 beserta detail error. Dokumentasi serializer DRF
+
+3. Autentikasi menjawab siapa yang mengirim request. Contohnya, SessionAuthentication menggunakan sesi login untuk mengenali pengguna dan mengisi request.user. Authorization untuk tindakan apa yang boleh dilakukan pengguna tersebut. Di DRF, permission class memeriksa aturan akses sebelum kode utama view dijalankan. Dokumentasi autentikasi DRF, dokumentasi permission DRF
+
+Hide tombol di template cuman mengatur tampilan. Pengguna tetap bisa mengirim request langsung melalui browser console atau klien HTTP lain. Sehingga server harus memeriksa izin pada setiap request, tampilan tombol bisa mengikuti peran pengguna, tetapi tidak menggantikan pemeriksaan di API. Dokumentasi permission DRF
+
+4. SessionAuthentication menggunakan cookie sesi login, yang dapat dikirim browser bareng request. Orang lain dapat mencoba memanfaatkan sesi aktif untuk melakukan tindakan tanpa diketahui user. Jadi disini fungsi yoken CSRF membantu server menolak request yang mengubah data kecuali request tersebut membawa token yang valid. Karena itu, request POST, PUT, PATCH, dan DELETE melalui sesi harus menyertakan token CSRF, biasanya di header X-CSRFToken. 
+
+force_authenticate menetapkan pengguna pada request dan melewati proses autentikasi sesi yang sebenarnya dan membuat tes yang menggunakannya dapat menguji permission, tetapi tidak membuktikan bahwa login sesi dan pemeriksaan CSRF berjalan. Untuk menguji CSRF pada API berbasis sesi, inilah fungsi APIClient(enforce_csrf_checks=True). login dengan .login(), lalu kirim request tanpa token dan pastikan server menolaknya.
+
+AI DISCLOSURE: 
+Saya menggunakan Chatgpt luna 6 medium. Dikarenakan tugas 6 ini sangat mirip dengan tutorial maka saya menggunakan strategi prompting: Mengunggah tutorial agar AI dapat mengerti secara pasti apa yang ingin saya capai, menentukan peran AI pada awal sesi, dan memberikan checklist yang harus saya penuhi. Kemudian dari satu per satu checklist saya meminta bantuan panduan AI terutama pada bagian java script. Testing sebagian besar dibuat oleh AI untuk memenuhi coverage.
