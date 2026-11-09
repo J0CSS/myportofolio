@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST      
 import datetime
 
-from main.models import Experience, Project, Skill
+from main.models import Experience, Project, SkillTag
 from main.forms import ProjectForm, ExperienceForm
 
 def show_main(request):
@@ -23,7 +23,8 @@ def show_main(request):
             "CS student at Universitas Indonesia."
             "A machine learning enthusiast and calculus enjoyer"
         ),
-        "skills": Skill.objects.all(),
+        "skill_tags": SkillTag.objects.order_by("name"),
+        "is_editor": request.user.is_authenticated and is_editor(request.user),
         "projects": Project.objects.prefetch_related("tech_tags").order_by("-started_at")[:3],
         "recent_experience": Experience.objects.all().order_by("-started_at")[:2],
         "last_login": last_login,
