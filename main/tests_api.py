@@ -236,9 +236,28 @@ class ExperienceAPITest(APITestCase):
 
         response = self.client.post(self.list_url, self.payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Experience.objects.count(), 1)
         response = self.client.delete(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(Experience.objects.filter(pk=self.experience.id).exists())
+        self.experience.refresh_from_db()
+        self.assertEqual(self.experience.title, "Edited by Editor")
+
+    def test_guest_and_regular_user_cannot_write(self):
+        for user in (None, self.visitor):
+            self.client.force_authenticate(user=user)
+            response = self.client.post(self.list_url, self.payload, format="json")
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            response = self.client.patch(
+                self.detail_url, {"title": "Not allowed"}, format="json",
+            )
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            response = self.client.delete(self.detail_url)
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.assertEqual(Experience.objects.count(), 1)
+        self.experience.refresh_from_db()
+        self.assertEqual(self.experience.title, "Teaching Assistant")
 
     def test_owner_can_create_and_delete(self):
         self.client.force_authenticate(user=self.owner)
@@ -252,14 +271,29 @@ class ExperienceAPITest(APITestCase):
         self.assertFalse(Experience.objects.filter(pk=new_id).exists())
 
     def test_regular_user_can_star_but_not_edit(self):
+        response = self.client.post(self.star_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
         self.client.force_authenticate(user=self.visitor)
         response = self.client.post(self.star_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data["is_starred"])
+        self.assertEqual(response.data["star_count"], 1)
+        response = self.client.post(self.star_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.data["is_starred"])
+        self.assertEqual(response.data["star_count"], 0)
         response = self.client.patch(
             self.detail_url, {"title": "Not allowed"}, format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_session_write_without_csrf_is_rejected(self):
+        client = APIClient(enforce_csrf_checks=True)
+        self.assertTrue(client.login(username="owner", password="test-password"))
+        response = client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Experience.objects.count(), 1)
 
     def test_invalid_experience_input_is_rejected(self):
         self.client.force_authenticate(user=self.owner)
