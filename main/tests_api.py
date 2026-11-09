@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from main.models import Experience, Project, ProjectTag, TechTag
+from main.models import Experience, Project, ProjectTag, Skill, SkillTag, TechTag
 
 
 class ProjectAPITest(APITestCase):
@@ -302,3 +302,120 @@ class ExperienceAPITest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("title", response.data)
+
+
+class SkillAPITest(APITestCase):
+    def setUp(self):
+        self.owner = User.objects.create_superuser(
+            username="owner", password="test-password", email="owner@example.com",
+        )
+        self.visitor = User.objects.create_user(
+            username="visitor", password="test-password",
+        )
+        self.editor = User.objects.create_user(
+            username="editor", password="test-password",
+        )
+        self.editor.groups.add(Group.objects.create(name="Editor"))
+        self.category = SkillTag.objects.create(name="Programming")
+        self.skill = Skill.objects.create(
+            title="Python", description="A programming language.",
+            started_at="2020-01-01", icon="🐍",
+        )
+        self.skill.category.add(self.category)
+        self.list_url = reverse("api:skill-list")
+        self.detail_url = reverse("api:skill-detail", args=[self.skill.id])
+        self.payload = {
+            "title": "Django",
+            "description": "<b>A web framework.</b>",
+            "category": [self.category.id],
+            "thumbnail": "https://example.com/django.png",
+            "started_at": "2022-01-01",
+            "icon": "⚡",
+        }
+
+    def test_public_list_search_detail_and_sensitive_fields(self):
+        response = self.client.get(self.list_url, {"title": "PYT"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]["id"], str(self.skill.id))
+        self.assertEqual(response.data[0]["category_display"], "Programming")
+        self.assertNotIn("email", response.data[0])
+        self.assertNotIn("password", response.data[0])
+        self.assertNotIn("password_hash", response.data[0])
+        self.assertEqual(self.client.get(self.detail_url).status_code, status.HTTP_200_OK)
+        missing_url = reverse("api:skill-detail", args=[uuid.uuid4()])
+        self.assertEqual(
+            self.client.get(missing_url).status_code,
+            status.HTTP_404_NOT_FOUND,
+        )
+
+    def test_guest_and_regular_user_cannot_write(self):
+        for user in (None, self.visitor):
+            self.client.force_authenticate(user=user)
+            response = self.client.post(self.list_url, self.payload, format="json")
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            response = self.client.patch(
+                self.detail_url, {"title": "Not allowed"}, format="json",
+            )
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            response = self.client.delete(self.detail_url)
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.assertEqual(Skill.objects.count(), 1)
+        self.skill.refresh_from_db()
+        self.assertEqual(self.skill.title, "Python")
+
+    def test_editor_can_patch_but_cannot_create_or_delete(self):
+        self.client.force_authenticate(user=self.editor)
+        response = self.client.patch(
+            self.detail_url, {"title": "Edited Skill"}, format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.skill.refresh_from_db()
+        self.assertEqual(self.skill.title, "Edited Skill")
+
+        response = self.client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Skill.objects.count(), 1)
+        response = self.client.delete(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertTrue(Skill.objects.filter(pk=self.skill.id).exists())
+        self.skill.refresh_from_db()
+        self.assertEqual(self.skill.title, "Edited Skill")
+
+    def test_owner_can_create_update_and_delete(self):
+        self.client.force_authenticate(user=self.owner)
+        response = self.client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        new_id = response.data["id"]
+        created = Skill.objects.get(pk=new_id)
+        self.assertEqual(created.description, "A web framework.")
+        self.assertEqual(list(created.category.all()), [self.category])
+
+        detail_url = reverse("api:skill-detail", args=[new_id])
+        response = self.client.patch(
+            detail_url, {"title": "Updated Django"}, format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        created.refresh_from_db()
+        self.assertEqual(created.title, "Updated Django")
+
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Skill.objects.filter(pk=new_id).exists())
+
+    def test_invalid_skill_input_is_rejected(self):
+        self.client.force_authenticate(user=self.owner)
+        for title in ("   ", "<script></script>"):
+            response = self.client.post(
+                self.list_url, {**self.payload, "title": title}, format="json",
+            )
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertIn("title", response.data)
+        self.assertEqual(Skill.objects.count(), 1)
+
+    def test_session_write_without_csrf_is_rejected(self):
+        client = APIClient(enforce_csrf_checks=True)
+        self.assertTrue(client.login(username="owner", password="test-password"))
+        response = client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Skill.objects.count(), 1)
