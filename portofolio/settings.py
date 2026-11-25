@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-*g$j6c+27#sto2a4guhz%)0wccx%m_0vixfg==ljpi^vnkbivq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "joshua-carnsyn-myportofolio.pws.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "10.0.2.2","joshua-carnsyn-myportofolio.pws.cs.ui.ac.id"]
 
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
 
@@ -42,11 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
+    'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
+    'main',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -56,6 +59,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # TODO: Enable TokenAuthentication first, followed by SessionAuthentication,
+        #       so mobile clients use tokens (and get 401 on missing/invalid tokens)
+        #       while web pages keep using sessions
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+}
+
+# Local development CORS settings for Flutter Web (Chrome).
+# Uses the `PRODUCTION` flag from `.env` / `.env.prod` (Tutorial 00/01):
+# allow all origins locally (`PRODUCTION=False`), and restrict in production.
+# In production (.env.prod), set CORS_ALLOWED_ORIGINS="https://your-web-app.example"
+# (only needed if you host Flutter Web; native Android apps do not use CORS).
+CORS_ALLOW_ALL_ORIGINS = not PRODUCTION
+if PRODUCTION:
+    CORS_ALLOWED_ORIGINS = [
+        origin.strip()
+        for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+        if origin.strip()
+    ]
 
 ROOT_URLCONF = 'portofolio.urls'
 
